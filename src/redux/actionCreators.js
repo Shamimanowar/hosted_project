@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
-
 const commentAdd = comment => {
     return ({
         type: actionTypes.ADD_COMMENT,
@@ -11,9 +10,9 @@ const commentAdd = comment => {
 
 export const addComment = comment => dispatch => {
     axios.post('http://localhost:3001/comments', comment)
-        .then(response => console.log(response))
-        .catch(err => console.log(err))
-    dispatch(commentAdd(comment));
+        .then(response => dispatch(commentAdd(comment)))
+        .catch(err => alert('Something went wrong! Your comment is not added for' + err.message + 'Try again please..'))
+        ;
 }
 
 const loadCommentsArr = commentsArr => {
@@ -28,7 +27,7 @@ export const loadComments = () => dispatch => {
             // console.log(response.data)
             dispatch(loadCommentsArr(response.data))
         })
-        .catch(err => console.log(err))
+        .catch(err => alert('Loading comments is failed for ' + err.message))
 }
 
 const loadDescriptionArr = desArr => {
@@ -38,9 +37,19 @@ const loadDescriptionArr = desArr => {
     }
 }
 
-export const loadDescription = desArr => dispatch => {
+export const loadDescription = () => dispatch => {
     axios.get('http://localhost:3001/DESCRIPTION')
         .then(response => {
             dispatch(loadDescriptionArr(response.data))
+        })
+        .catch((err) => {
+            alert(`This page is not loaded for + ${err.message}`)
+        })
+        .finally(() => {
+            // this is for to close the loader
+            dispatch({
+                type: actionTypes.IS_LOADING,
+                payload: false
+            })
         })
 }

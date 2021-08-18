@@ -7,12 +7,13 @@ import FlowerIn from './FlowerIn';
 import FlowerDetails from './FlowerDetails';
 import FeedbackForm from '../FeedbackForm';
 import Comments from '../Comments';
-
+import Loading from '../Loading';
 
 const mapStateToProps = state => {
     return {
         description: state.description,
         comments: state.comments,
+        isLoading: state.isLoading,
     }
 }
 
@@ -66,28 +67,30 @@ class Flower extends React.Component {
         //
         return (
             <div className='container'>
-                <div className='row' >
-                    <CardColumns>
-                        {flowers}
-                    </CardColumns>
-                    <Modal isOpen={this.state.isOpen}>
-                        <ModalBody>
-                            <Button onClick={this.modalToggler}>X</Button>
-                            {flowerDetails}
+                {this.props.isLoading ? <div className='col-sm-5 m-auto'><Loading /></div> :
+                    <div >
+                        <CardColumns>
+                            {flowers}
+                        </CardColumns>
+                        <Modal isOpen={this.state.isOpen}>
+                            <ModalBody>
+                                <Button onClick={this.modalToggler}>X</Button>
+                                {flowerDetails}
 
-                            <span>
-                                {(this.state.selectFlower === null) ? '' : <h3 style={{ marginBottom: '20px' }}>People Comments about {this.state.selectFlower.name}</h3>}
-                                {comments === null ? <b style={{ color: 'dodgerblue', fontFamily: 'georgia', fontSize: '20px', margin: '30px' }}>There are no comments</b> : comments}
-                            </span><hr color='red' style={{ marginBottom: '20px' }} />
+                                <span>
+                                    {(this.state.selectFlower === null) ? '' : <h3 style={{ marginBottom: '20px' }}>People Comments about {this.state.selectFlower.name}</h3>}
+                                    {comments === null ? <b style={{ color: 'dodgerblue', fontFamily: 'georgia', fontSize: '20px', margin: '30px' }}>There are no comments</b> : comments}
+                                </span><hr color='red' style={{ marginBottom: '20px' }} />
 
 
-                            {feedbackForm}
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button block onClick={this.modalToggler}>Close</Button>
-                        </ModalFooter>
-                    </Modal>
-                </div>
+                                {feedbackForm}
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button block onClick={this.modalToggler}>Close</Button>
+                            </ModalFooter>
+                        </Modal>
+                    </div>
+                }
 
             </div>
         );

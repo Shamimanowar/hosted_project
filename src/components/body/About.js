@@ -17,9 +17,9 @@ const About = () => {
                     <div className='col-6'>
                         <p>This application is created as a project task of bobubrihi full stack web development course with python and JavaScript.It is the first development of React.<br /> Share Here...
                         </p>
-                        <img width='80px' height='40px' src='assets/images/fb.png'
+                        <img width='80px' height='40px' src='http://localhost:3001/Gal-images/fb.png'
                             style={{ cursor: 'pointer', border: '1px solid #ddd', marginRight: '10px' }} alt='Facebook' />
-                        <img width='80px' height='40px' src='assets/images/insta.jpg'
+                        <img width='80px' height='40px' src='http://localhost:3001/Gal-images/insta.jpg'
                             style={{ cursor: 'pointer', border: '1px solid #ddd' }} alt='Insta' />
                     </div>
                 </div>

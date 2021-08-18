@@ -6,12 +6,14 @@ import PeopleIn from './PeopleIn';
 import PeopleDetails from './peopleDetails';
 import FeedbackForm from '../FeedbackForm';
 import Comments from '../Comments';
+import Loading from '../Loading';
 
 
 const mapStateToProps = state => {
     return {
         description: state.description,
         comments: state.comments,
+        isLoading: state.isLoading,
     }
 }
 
@@ -76,7 +78,7 @@ class People extends React.Component {
 
         return (
             <div className='container'>
-                <div >
+                {this.props.isLoading ? <div className='col-sm-5 m-auto'><Loading /></div> : <div >
                     <CardColumns>
                         {people}
                     </CardColumns>
@@ -94,7 +96,7 @@ class People extends React.Component {
                             <Button block onClick={this.modalToggler}>Close</Button>
                         </ModalFooter>
                     </Modal>
-                </div>
+                </div>}
             </div>
         );
     }

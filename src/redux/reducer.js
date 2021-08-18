@@ -4,6 +4,7 @@ import * as actionTypes from './actionTypes';
 const initState = {
     description: [],
     comments: [],
+    isLoading: true,
 }
 
 export const Reducer = (state = initState, action) => {
@@ -11,7 +12,6 @@ export const Reducer = (state = initState, action) => {
     switch (action.type) {
         case actionTypes.ADD_COMMENT:
             let id = state.comments.length;
-            console.log(state.comments)
             return {
                 ...state,
                 comments: state.comments.concat({ ...action.payload, id: id })
@@ -24,7 +24,12 @@ export const Reducer = (state = initState, action) => {
         case actionTypes.LOAD_DESCRIPTION:
             return {
                 ...state,
-                description: state.description.concat(...action.payload)
+                description: state.description.concat(...action.payload),
+            }
+        case actionTypes.IS_LOADING:
+            return {
+                ...state,
+                isLoading: action.payload
             }
 
         default:

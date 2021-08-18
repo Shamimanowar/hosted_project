@@ -1,3 +1,4 @@
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const LOAD_COMMENTS = 'LOAD_COMMENTS';
 export const LOAD_DESCRIPTION = 'LOAD_DESCRIPTION';
+export const IS_LOADING = 'IS_LOADING';

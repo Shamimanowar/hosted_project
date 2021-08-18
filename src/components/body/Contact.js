@@ -1,9 +1,9 @@
 import React from 'react';
 import { Formik } from 'formik';
-
+import { Input, Form, Button } from 'reactstrap';
 const Contact = () => {
     return (
-        <div>
+        <div style={{ marginTop: '50px' }}>
 
             <Formik
                 initialValues={{
@@ -27,11 +27,11 @@ const Contact = () => {
             >{
                     ({ values, handleChange, handleSubmit, errors }) => (
                         <div>
-                            <form onSubmit={handleSubmit}
-                                className='col-md-8 m-auto'>
-                                <h3>Please put your comment here</h3>
+                            <Form onSubmit={handleSubmit}
+                                className='col-sm-6 m-auto'>
+                                <h3 style={{ color: 'dodgerblue' }}>Please fillup the form to contact</h3>
 
-                                <input
+                                <Input
                                     name='email'
                                     value={values.email}
                                     onChange={handleChange}
@@ -40,7 +40,7 @@ const Contact = () => {
                                 />
                                 <span>{errors.email}</span><br />
 
-                                <input
+                                <Input
                                     name='phone'
                                     value={values.phone}
                                     onChange={handleChange}
@@ -49,18 +49,17 @@ const Contact = () => {
                                 />
                                 <span>{errors.phone}</span> <br />
 
-                                <textarea
-                                    rows='7'
-                                    cols='122'
+                                <Input
+                                    type='textarea'
                                     name='comment'
-                                    placeholder='write your comment here! '
+                                    placeholder='Enter Your Message! '
                                     onChange={handleChange}
                                     value={values.comment}
                                 />
-                                <span className='d-block'>{errors.comment}</span><br />
+                                <span>{errors.comment}</span><br />
 
-                                <button type='submit' className='btn btn-success m-auto' style={{ width: '100px' }}>Submit</button>
-                            </form>
+                                <Button block type='submit' className='btn btn-success m-auto' style={{ width: '100px' }}>Submit</Button>
+                            </Form>
 
                         </div>
                     )
