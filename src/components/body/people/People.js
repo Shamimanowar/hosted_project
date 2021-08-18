@@ -1,17 +1,19 @@
 import React from 'react';
 import { Modal, CardColumns, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { connect } from 'react-redux'
+
 import PeopleIn from './PeopleIn';
 import PeopleDetails from './peopleDetails';
-import { connect } from 'react-redux'
+import FeedbackForm from '../FeedbackForm';
+import Comments from '../Comments';
 
 
 const mapStateToProps = state => {
     return {
-        description: state.description
+        description: state.description,
+        comments: state.comments,
     }
 }
-
-
 
 
 
@@ -52,14 +54,29 @@ class People extends React.Component {
         })
 
         let peopleDetails = null;
+        let feedbackForm = null;
         if (this.state.peopleSelect != null) {
             peopleDetails = <PeopleDetails people={this.state.peopleSelect} />
+            feedbackForm = <FeedbackForm rootId={this.state.peopleSelect.id} category={this.state.peopleSelect.category} />
         }
 
+        let comments = null
+        let match = '';
+        if (this.state.peopleSelect !== null) {
+            match = this.props.comments.filter(item => {
+                return item.rootId === this.state.peopleSelect.id
+            })
+        }
+
+        if (match.length !== 0) {
+            comments = match.map(comment => {
+                return <Comments comment={comment} key={comment.id} />
+            })
+        }
 
         return (
             <div className='container'>
-                <div className='row' >
+                <div >
                     <CardColumns>
                         {people}
                     </CardColumns>
@@ -67,9 +84,14 @@ class People extends React.Component {
                         <ModalBody>
                             <Button onClick={this.modalToggler}>X</Button>
                             {peopleDetails}
+                            <span>
+                                {(this.state.peopleSelect === null) ? '' : <h3 style={{ marginBottom: '20px' }}>People Comments about {this.state.peopleSelect.name}</h3>}
+                                {comments === null ? <b style={{ color: 'dodgerblue', fontFamily: 'georgia', fontSize: '20px', margin: '30px' }}>There are no comments</b> : comments}
+                            </span><hr color='red' style={{ marginBottom: '20px' }} />
+                            {feedbackForm}
                         </ModalBody>
                         <ModalFooter>
-                            <Button onClick={this.modalToggler}>Close</Button>
+                            <Button block onClick={this.modalToggler}>Close</Button>
                         </ModalFooter>
                     </Modal>
                 </div>

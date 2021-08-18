@@ -1,12 +1,18 @@
 import React from 'react';
-import FlowerIn from './FlowerIn';
-import FlowerDetails from './FlowerDetails';
 import { Modal, CardColumns, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 
+
+import FlowerIn from './FlowerIn';
+import FlowerDetails from './FlowerDetails';
+import FeedbackForm from '../FeedbackForm';
+import Comments from '../Comments';
+
+
 const mapStateToProps = state => {
     return {
-        description: state.description
+        description: state.description,
+        comments: state.comments,
     }
 }
 
@@ -38,9 +44,26 @@ class Flower extends React.Component {
         })
 
         let flowerDetails = null;
+        let feedbackForm = null;
         if (this.state.selectFlower != null) {
             flowerDetails = <FlowerDetails flower={this.state.selectFlower} />
+            feedbackForm = <FeedbackForm rootId={this.state.selectFlower.id} category={this.state.selectFlower.category} />
         }
+        //
+        let comments = null;
+        let match = '';
+        if (this.state.selectFlower !== null) {
+            match = this.props.comments.filter(item => {
+                return item.rootId === this.state.selectFlower.id
+            })
+        }
+
+        if (match.length !== 0) {
+            comments = match.map(comment => {
+                return <Comments comment={comment} key={comment.id} />
+            })
+        }
+        //
         return (
             <div className='container'>
                 <div className='row' >
@@ -51,9 +74,17 @@ class Flower extends React.Component {
                         <ModalBody>
                             <Button onClick={this.modalToggler}>X</Button>
                             {flowerDetails}
+
+                            <span>
+                                {(this.state.selectFlower === null) ? '' : <h3 style={{ marginBottom: '20px' }}>People Comments about {this.state.selectFlower.name}</h3>}
+                                {comments === null ? <b style={{ color: 'dodgerblue', fontFamily: 'georgia', fontSize: '20px', margin: '30px' }}>There are no comments</b> : comments}
+                            </span><hr color='red' style={{ marginBottom: '20px' }} />
+
+
+                            {feedbackForm}
                         </ModalBody>
                         <ModalFooter>
-                            <Button onClick={this.modalToggler}>Close</Button>
+                            <Button block onClick={this.modalToggler}>Close</Button>
                         </ModalFooter>
                     </Modal>
                 </div>

@@ -5,7 +5,7 @@ const FlowerDetails = props => {
     return (
         <div>
             <Card body style={{ marginTop: '10px' }}>
-                <CardImg width='100%' src={props.flower.image} alt={props.flower.name} />
+                <CardImg width='100%' src={"http://localhost:3001/Gal-images/" + props.flower.image} alt={props.flower.name} />
             </Card>
             <CardBody>
                 <CardTitle>Name: {props.flower.name}</CardTitle>
