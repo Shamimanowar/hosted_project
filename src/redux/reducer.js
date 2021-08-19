@@ -5,6 +5,10 @@ const initState = {
     description: [],
     comments: [],
     isLoading: true,
+    token: null,
+    userId: null,
+    isAuthLoading: true,
+    errMsg: null,
 }
 
 export const Reducer = (state = initState, action) => {
@@ -30,6 +34,29 @@ export const Reducer = (state = initState, action) => {
             return {
                 ...state,
                 isLoading: action.payload
+            }
+        case actionTypes.AUTH_SUCCESS:
+            return {
+                ...state,
+                token: action.payload.token,
+                userId: action.payload.userId
+            }
+        case actionTypes.AUTH_LOGOUT:
+            return {
+                ...state,
+                token: null,
+                userId: null,
+                isAuthLoading: false
+            }
+        case actionTypes.AUTH_LOADING:
+            return {
+                ...state,
+                isAuthLoading: action.payload,
+            }
+        case actionTypes.AUTH_FAILED:
+            return {
+                ...state,
+                errMsg: action.payload
             }
 
         default:

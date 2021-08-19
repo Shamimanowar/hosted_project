@@ -31,6 +31,9 @@ const Navigation = () => {
                             <NavItem>
                                 <Link to='/contact' className='nav-link'>Contact</Link>
                             </NavItem>
+                            <NavItem>
+                                <Link to='/logout' className='nav-link'>Logout</Link>
+                            </NavItem>
 
                         </Nav>
                     </Collapse>

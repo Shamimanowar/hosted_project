@@ -43,7 +43,7 @@ export const loadDescription = () => dispatch => {
             dispatch(loadDescriptionArr(response.data))
         })
         .catch((err) => {
-            alert(`This page is not loaded for + ${err.message}`)
+            alert(`This page is not loaded for ${err.message}`)
         })
         .finally(() => {
             // this is for to close the loader
@@ -53,3 +53,87 @@ export const loadDescription = () => dispatch => {
             })
         })
 }
+
+
+// auth action creators
+
+export const authLogOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('expirationTime');
+    return {
+        type: actionTypes.AUTH_LOGOUT
+    }
+}
+const authLoading = isAuthLoading => {
+    return {
+        type: actionTypes.AUTH_LOADING,
+        payload: isAuthLoading,
+    }
+}
+
+const authSuccess = (token, userId) => {
+    return {
+        type: actionTypes.AUTH_SUCCESS,
+        payload: { token: token, userId: userId }
+    }
+}
+
+const authFailed = errMsg => {
+    return {
+        type: actionTypes.AUTH_FAILED,
+        payload: errMsg
+    }
+}
+
+
+export const tryToAuthanticate = (email, password, mode, navigate) => dispatch => {
+    dispatch(authLoading(true)) // this call is for to show loader after clicking login
+    const authData = {
+        email: email,
+        password: password,
+        returnSecureToken: true
+    }
+    const API_KEY = 'AIzaSyDMKpybseAHHmrdEyhLQpmF5_7njowwjgs';
+    let postUrl = null;
+    if (mode === 'Sign Up') {
+        postUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
+    } else {
+        postUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`
+    }
+
+    axios.post(postUrl, authData)
+        .then(response => {
+            localStorage.setItem('token', response.data.idToken);
+            localStorage.setItem('userId', response.data.localId);
+            let expirationTime = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+            localStorage.setItem('expirationTime', expirationTime);
+            dispatch(authSuccess(response.data.idToken, response.data.localId));
+            navigate.push('/home');
+
+        })
+        .catch(err => {
+            alert(err.response.data.error.message);
+            dispatch(authFailed(err.response.data.error.message))
+        })
+        .finally(() => { dispatch(authLoading(false)) })
+}
+
+export const authCheck = () => dispatch => {
+    let token = localStorage.getItem('token');
+    if (!token) {
+        dispatch(authLogOut());
+        // dispatch logout
+    } else {
+        let expirationTime = new Date(localStorage.getItem('expirationTime'));
+        if (expirationTime <= new Date()) {
+            // console.log('Expiration Time is over')
+            dispatch(authLogOut())
+            // dispatch logout cause expiration over
+        } else {
+            let userId = localStorage.getItem('userId')
+            dispatch(authSuccess(token, userId))
+        }
+    }
+}
+
